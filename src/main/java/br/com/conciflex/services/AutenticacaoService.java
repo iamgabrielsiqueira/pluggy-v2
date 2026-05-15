@@ -5,6 +5,7 @@
 package br.com.conciflex.services;
 
 import br.com.conciflex.model.classes.pluggy.Autenticacao;
+import br.com.conciflex.model.jdbc.JDBCAutenticacaoDAO;
 import br.com.conciflex.util.Log;
 import io.github.cdimascio.dotenv.Dotenv;
 import okhttp3.*;
@@ -30,6 +31,8 @@ public class AutenticacaoService {
     private final ObjectMapper mapper = new ObjectMapper();
 
     public Autenticacao getAutenticacao() {
+        Log.info("Buscando autenticação");
+
         String clientId = dotenv.get("CLIENT_ID");
         String clientSecret = dotenv.get("CLIENT_SECRET");
 
@@ -62,6 +65,8 @@ public class AutenticacaoService {
         }
 
         if (responseCode == 200) {
+            Log.success("Response code: " + responseCode);
+
             Autenticacao autenticacao;
 
             try {
@@ -71,8 +76,11 @@ public class AutenticacaoService {
                 throw new RuntimeException(e);
             }
 
+            JDBCAutenticacaoDAO.getInstance().salvar(autenticacao);
+
             return autenticacao;
         } else {
+            Log.error("Response code: " + responseCode);
             throw new RuntimeException("Não foi possivel autenticar, response code: " + responseCode);
         }
     }

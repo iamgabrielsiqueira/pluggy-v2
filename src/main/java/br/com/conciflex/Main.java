@@ -5,7 +5,9 @@
 package br.com.conciflex;
 
 import br.com.conciflex.controller.pluggy.AccountController;
+import br.com.conciflex.controller.pluggy.AutenticacaoController;
 import br.com.conciflex.model.classes.PluggyAccount;
+import br.com.conciflex.model.classes.pluggy.Autenticacao;
 import br.com.conciflex.model.jdbc.JDBCClienteDAO;
 import br.com.conciflex.util.Log;
 
@@ -14,6 +16,8 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) {
         Log.info("Iniciando aplicação");
+
+        Autenticacao autenticacao = AutenticacaoController.getInstance().getAutenticacao();
 
         JDBCClienteDAO.getInstance().listar();
 
@@ -27,8 +31,6 @@ public class Main {
             int atual = accounts.indexOf(account) + 1;
 
             Log.info("Buscando informações do item " + account.getItemCreatedId() + " (" + atual + "/" + total + ")");
-
-
         }
     }
 }
